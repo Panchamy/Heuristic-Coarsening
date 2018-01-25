@@ -24,6 +24,7 @@ end
 all_vertex = reshape([vertex.coordinates], 2, [])';
 all_vertex_ids = [vertex.id];
 [all_vertex_sorted, sortInds] = sortrows(all_vertex);
+all_vertex_ids = all_vertex_ids(sortInds);
 %%The last elements are not searched
 all_vertex_sorted = [all_vertex_sorted; (max(all_vertex(:))*10).*ones(5,2)];
 for i = 1:length(shape)
@@ -31,7 +32,7 @@ for i = 1:length(shape)
     current(end+1,:) = [shape(i).X(1); shape(i).Y(1)]';                         % <- X and Y coordinates
     current(end+1,:) = [shape(i).X(end-1); shape(i).Y(end-1)]';                 % <- X and Y coordinates
     current(~any(~isnan(current), 2),:)=[];
-    index = ismember_custom(current, all_vertex);
+    index = ismember_custom(current, all_vertex_sorted);
     shape(i).vertex_ids = all_vertex_ids(index);
 end
 
