@@ -1,5 +1,11 @@
-function [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, var_threshold, constraint_links, pruning, flag_intersection)
+function [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, params)
     
+    % extract the necessary parameter values
+    var_threshold = params.threshold;
+    constraint_links = params.constraint_links;
+    pruning = params.pruning;
+    flag_intersection = params.flag_intersection;
+
     incoming = nodes(i).predecessors;
     outgoing = nodes(i).successors;
     node_id = nodes(i).id;

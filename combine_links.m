@@ -1,11 +1,12 @@
-function [links, nodes, weights] = combine_links(links, nodes, weights, exempt_ids, var_threshold, constraint_links, pruning, flag_intersection)
+function [links, nodes, weights] = combine_links(links, nodes, weights, params)
+
+% extract the necessary parameter values
+exempt_ids = params.exempt_ids;
+pruning = params.pruning;
 
 % combine links with one neighbor and similar speed
 nodes = sort_nodes(nodes);
-all_pairs = [[links.o_node];[links.d_node]]';
-[~,indexes ,~] = unique(all_pairs, 'rows');
-links = links(indexes);
-weights = weights(indexes);
+[links, weights] = remove_duplicate_edges(links, weights);
 G = digraph([links.o_node], [links.d_node]);
 
 if isfield(links,'removed_nodes')
@@ -45,18 +46,14 @@ while 1
         if isempty(all_link_ids)
             i = i+1;
         else
-            [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, var_threshold, constraint_links, pruning, flag_intersection);
+            [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, params);
         end     
     end 
 end
 
 %%
-all_pairs = [[links.o_node];[links.d_node]]';
-[~,indexes ,~] = unique(all_pairs, 'rows');
-links = links(indexes);
-weights = weights(indexes);
+[links, weights] = delete_duplicate_edges(links, weights);
 G = digraph([links.o_node], [links.d_node]);
-% G = rmnode(G,removed_nodes);
 unused_nodes = setdiff([1:size(G.Nodes,1)], unique([[links.o_node], [links.d_node]]));
 G = rmnode(G,unused_nodes);
 A = adjacency(G);

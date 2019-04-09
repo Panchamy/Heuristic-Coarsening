@@ -1,11 +1,11 @@
-function [new_links, new_vertex, new_weights] = coarsening(links, vertex, weights, exempt_ids, pruning, threshold, iterations, constraint_links, flag_intersection)
+function [new_links, new_vertex, new_weights] = coarsening(links, vertex, weights, params)
 
 new_links = links; new_vertex = vertex; new_weights = weights;
 flag = 1;
 prev_links = new_links;
 iter = 0;
 while flag == 1 && iter<iterations
-    [new_links, new_vertex, new_weights] = combine_links(new_links, new_vertex, new_weights, exempt_ids, threshold, constraint_links, pruning, flag_intersection);
+    [new_links, new_vertex, new_weights] = combine_links(new_links, new_vertex, new_weights, params);
     used_nodes = find([new_vertex.neighbor_length] > 0);
     if length(prev_links) == length(new_links) || length(used_nodes) <= 20
         flag = 0;

@@ -1,6 +1,5 @@
 function [links, weights] = delete_self_loops(links, weights, exempt_ids)
 
-    all = 1:length(links);
     o_nodes = [links.o_node];
     d_nodes = [links.d_node];
     if isempty(exempt_ids)
@@ -17,8 +16,6 @@ function [links, weights] = delete_self_loops(links, weights, exempt_ids)
         weights(d) = [];
     end
     
-    all_pairs = [[links.o_node];[links.d_node]]';
-    [~,indexes ,~] = unique(all_pairs, 'rows');
-    links = links(indexes);
-    weights = weights(indexes);
+    [links, weights] = delete_duplicate_edges(links, weights);
+    
 end

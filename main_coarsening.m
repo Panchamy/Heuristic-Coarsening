@@ -33,18 +33,22 @@ for i = 1:length(links)
     weights(i) = min(links(i).type);
 end   
 
-%intialize the exempt ids
-flag_study_area = 0;
-flag_intersection = 0;
-exempt_ids = [];
+%initialize the parameters
+params.flag_study_area = 0;
+params.flag_intersection = 0;
+params.exempt_ids = [];
+params.pruning = 0;
+params.threshold = 1000;
+params.iterations = 1000;
+params.constraint_links = 1;
 
-if flag_study_area == 1
+if params.flag_study_area == 1
     load('study_area_boundary.mat');                                        % sample study area boundary of amsterdam
-    exempt_ids = define_study_area(vertex, lat_min, lat_max, lon_min, lon_max);
+    params.exempt_ids = define_study_area(vertex, lat_min, lat_max, lon_min, lon_max);
 end
 
 % coarsening framework
-[new_links, new_vertex, new_weights] = coarsening(links, vertex, weights, exempt_ids, 0, 1000, 1000, 1, flag_intersection);
+[new_links, new_vertex, new_weights] = coarsening(links, vertex, weights, params);
 
 %Save results
 save('network-reduction.mat', 'new_links', 'new_vertex', 'new_weights');
