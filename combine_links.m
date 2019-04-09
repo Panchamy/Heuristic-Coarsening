@@ -1,4 +1,4 @@
-function [links, nodes, weights] = combine_links(links, nodes, weights, exempt_ids, var_threshold, constraint_links, pruning)
+function [links, nodes, weights] = combine_links(links, nodes, weights, exempt_ids, var_threshold, constraint_links, pruning, flag_intersection)
 
 % combine links with one neighbor and similar speed
 nodes = sort_nodes(nodes);
@@ -45,7 +45,7 @@ while 1
         if isempty(all_link_ids)
             i = i+1;
         else
-            [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, var_threshold, constraint_links, pruning);
+            [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, var_threshold, constraint_links, pruning, flag_intersection);
         end     
     end 
 end

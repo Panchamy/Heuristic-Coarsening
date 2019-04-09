@@ -1,8 +1,14 @@
-function [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, var_threshold, constraint_links, pruning)
+function [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, weights, A, max_link_id, i, var_threshold, constraint_links, pruning, flag_intersection)
     
     incoming = nodes(i).predecessors;
     outgoing = nodes(i).successors;
     node_id = nodes(i).id;
+    
+    if flag_intersection == 0
+        shortcut_size = length(incoming) + length(outgoing);
+    else
+        shortcut_size = 2; % if greater, its an intersection
+    end
     
     if isempty(incoming) || isempty(outgoing)
 %         %no incoming or outgoing links - no collapse or delete node
@@ -21,7 +27,7 @@ function [links, nodes, weights, A, max_link_id, i] = rulesets(links, nodes, wei
     else
         [p,q] = meshgrid(incoming, outgoing);
         pairs = [p(:) q(:)];
-        if (constraint_links == 1) && (size(pairs, 1) >= (length(incoming) + length(outgoing)))
+        if (constraint_links == 1) && (size(pairs, 1) >= shortcut_size)
             %leads to same or larger number of links - no collapse
             i = i+1;
         else
