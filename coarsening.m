@@ -1,5 +1,6 @@
 function [new_links, new_vertex, new_weights] = coarsening(links, vertex, weights, params)
 
+iterations = params.iterations;
 new_links = links; new_vertex = vertex; new_weights = weights;
 flag = 1;
 prev_links = new_links;

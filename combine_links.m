@@ -6,7 +6,7 @@ pruning = params.pruning;
 
 % combine links with one neighbor and similar speed
 nodes = sort_nodes(nodes);
-[links, weights] = remove_duplicate_edges(links, weights);
+[links, weights] = delete_duplicate_edges(links, weights);
 G = digraph([links.o_node], [links.d_node]);
 
 if isfield(links,'removed_nodes')
